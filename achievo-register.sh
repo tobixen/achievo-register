@@ -4,9 +4,10 @@ project="$1"
 num_hours="$2"
 comments="$3"
 
-if [ -z "$comments" ]
+if [ -z "$comments" ] || [ "$project" == "--help" ]
 then
     echo "usage: $0 project_handle num_hours comments"
+    echo "optional environment variables: ACHIEVO_USER, ACHIEVO_PASS, ACHIEVO_DATE"
     exit 1
 fi
 
@@ -48,9 +49,17 @@ userid=$(perl -nle 'last if /value="person.id='"'"'(\d+)'"'"'"/ && print $1' $tm
 cur_year=$(date +%Y)
 cur_month=$(date +%m)
 cur_day=$(date +%d)
-year=$cur_year
-month=$cur_month
-day=$cur_day
+
+if [ -z "$ACHIEVO_DATE" ]
+then
+    year=$cur_year
+    month=$cur_month
+    day=$cur_day
+else
+    year=$(date -d "$ACHIEVO_DATE" +%Y)
+    month=$(date -d "$ACHIEVO_DATE" +%m)
+    day=$(date -d "$ACHIEVO_DATE" +%d)
+fi
 
 curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'9'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$project'" -F phaseid="phase.id='66'" -F achievo=$sessionid -F "remark=$comments" -F workperiod=1 -F billpercent=1 "https://secure.redpill-linpro.com/achievo/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
 #-F atkstackid=50c8e8855c359
