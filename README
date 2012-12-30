@@ -54,7 +54,7 @@ checks, permission checks etc passes.
 4) Edit the PHP to make some easy-to-use API - but then again, I don't
 feel like diving into the PHP code.
 
-5) Crude bash-script using curl, wget or similar to push through
+5) Stupid-ugly bash-script using curl, wget or similar to push through
 registrations through a bare minimum of HTTP requests.  This was
 eventually chosen - KISS, curl+bash is installed on nearly any
 linux-box, and the achievo web-UI is considered to be quite static.
