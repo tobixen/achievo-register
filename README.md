@@ -1,6 +1,4 @@
-This is primary made for employees of Redpill-Linpro.  I think we're
-still a bit short of having some internal equivalent of github or
-gitourious, so I'll just throw this one out at github as for now.
+This is primary made for employees of Redpill-Linpro.  
 This may be useful for others using achievo as well, though it may
 need some tweaking.
 
