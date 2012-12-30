@@ -7,11 +7,13 @@ comments="$3"
 if [ -z "$comments" ] || [ "$project" == "--help" ]
 then
     echo "usage: $0 project_handle num_hours comments"
-    echo "optional environment variables: ACHIEVO_USER, ACHIEVO_PASS, ACHIEVO_DATE, ACHIEVO_URL, ACHIEVO_BILLPERCENT, ACHIEVO_TMPDIR"
+    echo "optional environment variables: ACHIEVO_USER, ACHIEVO_PASS, ACHIEVO_DATE, ACHIEVO_URL, ACHIEVO_BILLPERCENT, ACHIEVO_TMPDIR, ACHIEVO_PHASEID"
     exit 1
 fi
 
+## At least the top two default values needs to be tweaked for external usage
 [ -z "$ACHIEVO_URL" ] && ACHIEVO_URL="https://secure.redpill-linpro.com/achievo"
+[ -z "$ACHIEVO_PHASEID" ] && ACHIEVO_PHASEID="66"
 [ -z "$ACHIEVO_BILLPERCENT" ] && ACHIEVO_BILLPERCENT="1"
 
 
@@ -74,7 +76,7 @@ else
     day=$(date -d "$ACHIEVO_DATE" +%d)
 fi
 
-curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'9'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='66'" -F achievo=$sessionid -F "remark=$comments" -F workperiod=1 -F billpercent=${ACHIEVO_BILLPERCENT} "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
+curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'9'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='$ACHIEVO_PHASEID'" -F achievo=$sessionid -F "remark=$comments" -F workperiod=1 -F billpercent=${ACHIEVO_BILLPERCENT} "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
 #-F atkstackid=50c8e8855c359
 # atkescape=(blank)
 

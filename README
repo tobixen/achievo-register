@@ -1,10 +1,16 @@
+This is primary made for employees of Redpill-Linpro.  I think we're
+still a bit short of having some internal equivalent of github or
+gitourious, so I'll just throw this one out at github as for now.
+This may be useful for others using achievo as well, though it may
+need some tweaking.
+
 General thought
 ===============
 
-Achievo is very annoyingly slow.  I've tried to look a bit on it - it
-does queries like "what projects have you been working on during the
-last two months?" on a big table with all the time registrations just
-to populate the select-box with available projects.  This could
+Our Achievo is very annoyingly slow.  I've tried to look a bit on it -
+it does queries like "what projects have you been working on during
+the last two months?" on a big table with all the time registrations
+just to populate the select-box with available projects.  This could
 probably be fixed by caching on the application side ... maybe
 upgrading to the latest available version from upstream would help
 ... but that's not my cup of tea, someone else eventually has to look
@@ -56,14 +62,17 @@ feel like diving into the PHP code.
 
 5) Stupid-ugly bash-script using curl, wget or similar to push through
 registrations through a bare minimum of HTTP requests.  This was
-eventually chosen - KISS, curl+bash is installed on nearly any
+eventually chosen - KISS, curl+bash+perl is installed on nearly any
 linux-box, and the achievo web-UI is considered to be quite static.
+Since option handling is messy in bash, I'm passing options through
+environment variables ... stupid-ugly :-)
 
 6) As #5, but use perl or python.  I was seriously considering to make
 a switch when I was half-way through implementing #5 - but then again,
 there is a risk that I'd have to make dependencies using extra
-libraries, with python now it's slightly non-trivial due to the
-python2/python3 incompatibility (no guarantee that python3 is
+libraries.  Also, python is my favorite ... but with python now it's
+slightly non-trivial to make sure the script works on all distros due
+to the python2/python3 incompatibility (no guarantee that python3 is
 installed, no guarantee that #!/usr/bin/python will invoke python2,
 and no guarantee that the symlink /usr/bin/python2 exists ...)
 ... plus that I have some bad memories using library methods on https,
