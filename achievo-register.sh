@@ -57,7 +57,7 @@ projectid=$(perl -nle 'last if /<option value="project.id='"'"'(\d+)'"'"'"\s*>'$
 ## TODO
 if [ -z "$projectid" ]
 then
-    curl --cookie-jar cookies.txt --silent "${ACHIEVO_URL}/dispatch.php?atklevel=1&atkprevlevel=1&atkstackid=50d865ddc43a9&achievo=${sessionid}&atkescape=&atknodetype=project.projectselector&atkaction=select&atksmartsearch=clear&atkstartat=0&atksearch%5Babbreviation%5D=${project}&atksearchmode%5Babbreviation%5D=substring&atksearch%5Bname%5D=&atksearchmode%5Bname%5D=substring&atksearch_AE_coordinator%5Bcoordinator%5D%5B%5D=&atksearchmode%5Bcoordinator%5D=exact" > $tmpdir/projectcode
+    curl --cookie-jar cookies.txt --silent "${ACHIEVO_URL}/dispatch.php?atklevel=1&atkprevlevel=1&achievo=${sessionid}&atkescape=&atknodetype=project.projectselector&atkaction=select&atksmartsearch=clear&atkstartat=0&atksearch%5Babbreviation%5D=${project}&atksearchmode%5Babbreviation%5D=substring&atksearch%5Bname%5D=&atksearchmode%5Bname%5D=substring&atksearch_AE_coordinator%5Bcoordinator%5D%5B%5D=&atksearchmode%5Bcoordinator%5D=exact" > $tmpdir/projectcode
     projectid=$(perl -nle 'last if /project.id%3D%27(\d+)%27'"'"'"\s*>'$project'/ && print $1' $tmpdir/projectcode)
 fi
 
@@ -77,8 +77,6 @@ else
 fi
 
 curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'9'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='$ACHIEVO_PHASEID'" -F achievo=$sessionid -F "remark=$comments" -F workperiod=1 -F billpercent=${ACHIEVO_BILLPERCENT} "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
-#-F atkstackid=50c8e8855c359
-# atkescape=(blank)
 
 
 ## cleanup
