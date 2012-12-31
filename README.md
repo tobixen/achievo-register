@@ -2,6 +2,12 @@ This is primary made for employees of Redpill-Linpro.
 This may be useful for others using achievo as well, though it may
 need some tweaking.
 
+KNOWN BUGS
+==========
+
+* Charset problems - avoid using non-ascii letters or it may appear as WTF-8.
+* very sloppy support for phase ID - it has to be specified as a numeric ID.  At our department 66 ("leveranse") seems to work fine for most practical purposes.
+
 General thought
 ===============
 
