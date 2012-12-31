@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ -f "$HOME/.achievorc" ] && . "$HOME/.achievorc"
+
 project="$1"
 num_hours="$2"
 comments="$3"
@@ -8,6 +10,7 @@ if [ -z "$comments" ] || [ "$project" == "--help" ]
 then
     echo "usage: $0 project_handle num_hours comments"
     echo "optional environment variables: ACHIEVO_USER, ACHIEVO_PASS, ACHIEVO_DATE, ACHIEVO_URL, ACHIEVO_BILLPERCENT, ACHIEVO_TMPDIR, ACHIEVO_PHASEID"
+    echo "script will source $HOME/.achievorc on startup, so ACHIVO_PASS and ACHIEVO_USER may be thrown in there"
     exit 1
 fi
 
