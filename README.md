@@ -5,10 +5,10 @@ need some tweaking.
 General thought
 ===============
 
-Our Achievo is very annoyingly slow.  I've tried to look a bit on it -
-it does queries like "what projects have you been working on during
-the last two months?" on a big table with all the time registrations
-just to populate the select-box with available projects.  This could
+Our Achievo is annoyingly slow.  I've tried to look a bit on it - it
+does queries like "what projects have you been working on during the
+last two months?" on a big table with all the time registrations just
+to populate the select-box with available projects.  This could
 probably be fixed by caching on the application side ... maybe
 upgrading to the latest available version from upstream would help
 ... but that's not my cup of tea, someone else eventually has to look
@@ -26,15 +26,20 @@ from other tools and then manually look through and edit.
 Wanted
 ======
 
-1) Utility to throw in registrations (work done, billable hours) into
-achievo via the command line (to avoid spending time browsing through
-menues)
+1) Utility to throw in registrations (like work done and billable
+hours) into achievo via the command line (to avoid spending time
+browsing through menues)
 
 2) Integrations between achievo and other tools (i.e. RT) to avoid
 manually copying data from one tool to another.
 
 3) New ways to keep track of how much time I've spent on different
 projects.
+
+This simple-ugly bash script solves #1 above.  I will eventually make
+another simple-ugly wrapper bash script to solve #3 above.  This
+script doesn't really solve #2 above - though, I'm planning to
+introduce some wrapper scripts to help me with this as well.
 
 Design ideas
 ============
