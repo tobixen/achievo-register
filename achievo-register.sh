@@ -9,15 +9,14 @@ comments="$3"
 if [ -z "$comments" ] || [ "$project" == "--help" ]
 then
     echo "usage: $0 project_handle num_hours comments"
-    echo "optional environment variables: ACHIEVO_USER, ACHIEVO_PASS, ACHIEVO_DATE, ACHIEVO_URL, ACHIEVO_BILLPERCENT, ACHIEVO_TMPDIR, ACHIEVO_PHASEID"
+    echo "optional environment variables: ACHIEVO_USER, ACHIEVO_PASS, ACHIEVO_DATE, ACHIEVO_URL, ACHIEVO_BILLPERCENTID, ACHIEVO_TMPDIR, ACHIEVO_PHASEID"
     echo "script will source $HOME/.achievorc on startup, so ACHIVO_PASS and ACHIEVO_USER may be thrown in there"
     exit 1
 fi
 
 ## At least the top two default values needs to be tweaked for external usage
 [ -z "$ACHIEVO_URL" ] && ACHIEVO_URL="https://secure.redpill-linpro.com/achievo"
-[ -z "$ACHIEVO_PHASEID" ] && ACHIEVO_PHASEID="66"
-[ -z "$ACHIEVO_BILLPERCENT" ] && ACHIEVO_BILLPERCENT="1"
+[ -z "$ACHIEVO_BILLPERCENTID" ] && ACHIEVO_BILLPERCENTID="1"
 
 
 if [ -z "$ACHIEVO_TMPDIR" ]
@@ -79,7 +78,13 @@ else
     day=$(date -d "$ACHIEVO_DATE" +%d)
 fi
 
-curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'9'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='$ACHIEVO_PHASEID'" -F achievo=$sessionid -F "remark=$comments" -F workperiod=1 -F billpercent=${ACHIEVO_BILLPERCENT} "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
+if [ -z $ACHIEVO_PHASEID ]
+then
+    curl --silent -d userid=person.id%3D"'$userid'" -d activityid=activity.id%3D"'9'" -d 'entrydate%5Byear%5D'=$cur_year -d 'entrydate%5Bmonth%5D'=$cur_month -d 'entrydate%5Bday%5D'=$cur_day -d 'activitydate%5Byear%5D'=$year -d 'activitydate%5Bmonth%5D'=$month  -d time=$num_hours -d 'activitydate%5Bday%5D'=$day -d projectid="project.id%3D'$projectid'" -d achievo=$sessionid -d "remark=$comments" -d workperiod=1 -d billpercent="billpercent.id%3D'${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=add&atkfieldprefix=&atkpartial=attribute.phaseid.refresh&atklevel=-3&atkprevlevel=0&achivo=$sessionid" > $tmpdir/phaseid
+    ACHIEVO_PHASEID=$(perl -nle 'last if /phase.id='"'"'(\d+)'"'"'/ && print $1' $tmpdir/phaseid)
+fi
+
+curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'9'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='$ACHIEVO_PHASEID'" -F achievo=$sessionid -F "remark=$comments" -F workperiod=1 -F billpercent="billpercent.id='${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
 
 
 ## cleanup
