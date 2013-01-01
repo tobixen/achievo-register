@@ -2,11 +2,14 @@ This is primary made for employees of Redpill-Linpro.
 This may be useful for others using achievo as well, though it may
 need some tweaking.
 
+For support and ideas, contact tobias@redpill-linpro.com, or /msg
+tobias at irc.redpill-linpro.com
+
 KNOWN BUGS
 ==========
 
 * Many default values are specific for the setup at Redpill Linpro, and some may even be specific to my department.
-* The default URL seems to be protected by basic auth when accessing from outside the office/VPN.  Adding username/password into the URL may help.
+* The default URL seems to be protected by basic auth when accessing from outside the office/VPN.  Configuring a ACHIEVO_URL with username/password may help.
 * Charset problems - avoid using non-ascii letters or it may appear as WTF-8.
 * very sloppy support for phase ID - it has to be specified as a numeric ID.  Automatic selection of phase ID works for projects with only one phase ID.
 * very sloppy support for billable percentage - for Redpill Linpro, set ACHIEVO_BILLPERCENTID=3 for "0% billable" and leave the default (1) for "100% billable".
