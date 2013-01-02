@@ -1,6 +1,6 @@
-This is primary made for employees of Redpill-Linpro.  
-This may be useful for others using achievo as well, though it may
-need some tweaking.
+This is primary made for employees of Redpill-Linpro.  This may be
+useful for others using achievo as well, I'd be happy to know if the
+script works out of the box or not for other achievo instances.
 
 For support and ideas, contact tobias@redpill-linpro.com, or /msg
 tobias at irc.redpill-linpro.com
@@ -16,7 +16,7 @@ Quickguide optimized for fellow colleagues
 
     ACHIEVO_USER=$LOGNAME  
     ACHIEVO_PASS="dead stapled horse eating battery"  
-    [ -z "$ACHIEVO_URL" ] && ACHIEVO_URL="https://${ACHIEVO_USER}:battery%20staple%20horse%20correct@secure.redpill-linpro.com/achievo"  
+    [ -z "$ACHIEVO_URL" ] && ACHIEVO_URL="https://${ACHIEVO_USER}:dead%20stapled%20horse%20eating%20battery@secure.redpill-linpro.com/achievo"  
 
 * Run the script like this:
 
@@ -33,7 +33,7 @@ configuration:
 
 * ACHIEVO_USER - defaults to $LOGNAME, which is usually sane, but it's nice to set this environment variable to avoid the warning from the script.
 * ACHIEVO_PASS - by default the script will read it from stdin.
-* ACHIEVO_URL - mandatory configuration variable. For Redpill-Linpro it's https://secure.redpill-linpro.no/achievo - BUT we have an extra basic auth thrown over achievo, hence you'll need to add your ldap username and password into the URL.
+* ACHIEVO_URL - mandatory configuration variable.
 * ACHIEVO_DATE - date the work was performed (defaults to "today")
 * ACHIEVO_BILLPERCENTID - defaults to 1 for "normal (100%) billable".  For Redpill Linpro, 3 is alternatively the most useful value (non-billable).
 * ACHIEVO_PHASEID - integer for the phase ID.  Need not be set for projects with only one phase.
@@ -56,12 +56,11 @@ Our Achievo is annoyingly slow.  I've tried to look a bit on it - it
 does queries like "what projects have you been working on during the
 last two months?" on a big table with all the time registrations just
 to populate the select-box with available projects.  This could
-probably be fixed by caching on the application side ... maybe
-upgrading to the latest available version from upstream would help
-... but that's not my cup of tea, someone else eventually has to look
-into that.
+probably be fixed by caching on the application side ... but PHP
+coding is not my cup of tea, someone else eventually has to look into
+that.
 
-Even if achoo would have been fast, it's a significant overhead to
+Even if achievo would have been fast, it's a significant overhead to
 register hours - depending on how fine-grained and exact one wants the
 registrations to be.
 
