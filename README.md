@@ -14,9 +14,9 @@ Quickguide optimized for fellow colleagues
 
 * Set up $HOME/.achievorc like this:
 
-    ACHIEVO_USER=$LOGNAME
-    ACHIEVO_PASS="dead stapled horse eating battery"
-    [ -z "$ACHIEVO_URL" ] && ACHIEVO_URL="https://${ACHIEVO_USER}:battery%20staple%20horse%20correct@secure.redpill-linpro.com/achievo"
+    ACHIEVO_USER=$LOGNAME  
+    ACHIEVO_PASS="dead stapled horse eating battery"  
+    [ -z "$ACHIEVO_URL" ] && ACHIEVO_URL="https://${ACHIEVO_USER}:battery%20staple%20horse%20correct@secure.redpill-linpro.com/achievo"  
 
 * Run the script like this:
 
