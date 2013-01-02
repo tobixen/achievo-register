@@ -5,18 +5,52 @@ need some tweaking.
 For support and ideas, contact tobias@redpill-linpro.com, or /msg
 tobias at irc.redpill-linpro.com
 
+Quickguide optimized for fellow colleagues
+==========================================
+
+* Clone the repository
+
+ git clone https://github.com/tobixen/achievo-register.git
+
+* Set up $HOME/.achievorc like this:
+
+ ACHIEVO_USER=$LOGNAME
+ ACHIEVO_PASS="dead stapled horse eating battery"
+ [ -z "$ACHIEVO_URL" ] && ACHIEVO_URL="https://$ACHIEVO_USER:battery%20staple%20horse%20correct@secure.redpill-linpro.com/achievo"
+
+* Run the script like this:
+
+ achievo-register/achievo-register.sh drf-div 00:15 "research and setup of achievo-register.sh"
+
+Install & use
+=============
+
+Currently the achievo register script is a simple stupid bash script
+that takes three positional mandatory arguments - the project code,
+the number of hours and the remarks.  Since option passing in bash is
+painful, environment variables are used for passing options and
+configuration:
+
+* ACHIEVO_USER - defaults to $LOGNAME, which is usually sane, but it's nice to set this environment variable to avoid the warning from the script.
+* ACHIEVO_PASS - by default the script will read it from stdin.
+* ACHIEVO_URL - mandatory configuration variable. For Redpill-Linpro it's https://secure.redpill-linpro.no/achievo - BUT we have an extra basic auth thrown over achievo, hence you'll need to add your ldap username and password into the URL.
+* ACHIEVO_DATE - date the work was performed (defaults to "today")
+* ACHIEVO_BILLPERCENTID - defaults to 1 for "normal (100%) billable".  For Redpill Linpro, 3 is alternatively the most useful value (non-billable).
+* ACHIEVO_PHASEID - integer for the phase ID.  Need not be set for projects with only one phase.
+* ACHIEVO_TMPDIR - mostly for debugging purposes - if set, the script will store temporary files in this directory, and will delete the directory after usage.  With ACHIEVO_TMPDIR set to some directory, the given directory will be used, and no cleanup will be performed.
+
+
 KNOWN BUGS
 ==========
 
 * Many default values are specific for the setup at Redpill Linpro, and some may even be specific to my department.
-* The default URL seems to be protected by basic auth when accessing from outside the office/VPN.  Configuring a ACHIEVO_URL with username/password may help.
 * Charset problems - avoid using non-ascii letters or it may appear as WTF-8.
 * very sloppy support for phase ID - it has to be specified as a numeric ID.  Automatic selection of phase ID works for projects with only one phase ID.
 * very sloppy support for billable percentage - for Redpill Linpro, set ACHIEVO_BILLPERCENTID=3 for "0% billable" and leave the default (1) for "100% billable".
 * Not very well tested - always follow up by checking the Web UI that the registration has gone correctly through
 
-General thought
-===============
+General thoughts
+================
 
 Our Achievo is annoyingly slow.  I've tried to look a bit on it - it
 does queries like "what projects have you been working on during the
@@ -36,8 +70,8 @@ all time registrations for a full day.  I think it would be a useful
 workflow to have the timesheet prefilled with information gathered
 from other tools and then manually look through and edit.
 
-Wanted
-======
+General wishes
+==============
 
 1) Utility to throw in registrations (like work done and billable
 hours) into achievo via the command line (to avoid spending time

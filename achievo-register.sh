@@ -15,7 +15,12 @@ then
 fi
 
 ## At least the top two default values needs to be tweaked for external usage
-[ -z "$ACHIEVO_URL" ] && ACHIEVO_URL="https://secure.redpill-linpro.com/achievo"
+if [ -z "$ACHIEVO_URL" ]
+then
+    echo "Please set up a .achievorc with ACHIEVO_URL and ACHIEVO_PASS.  Read the README."
+    exit 1
+fi
+
 [ -z "$ACHIEVO_BILLPERCENTID" ] && ACHIEVO_BILLPERCENTID="1"
 
 
@@ -56,7 +61,6 @@ projectid=$(perl -nle 'last if /<option value="project.id='"'"'(\d+)'"'"'"\s*>'$
 
 
 
-## TODO
 if [ -z "$projectid" ]
 then
     curl --cookie-jar cookies.txt --silent "${ACHIEVO_URL}/dispatch.php?atklevel=1&atkprevlevel=1&achievo=${sessionid}&atkescape=&atknodetype=project.projectselector&atkaction=select&atksmartsearch=clear&atkstartat=0&atksearch%5Babbreviation%5D=${project}&atksearchmode%5Babbreviation%5D=substring&atksearch%5Bname%5D=&atksearchmode%5Bname%5D=substring&atksearch_AE_coordinator%5Bcoordinator%5D%5B%5D=&atksearchmode%5Bcoordinator%5D=exact" > $tmpdir/projectcode
