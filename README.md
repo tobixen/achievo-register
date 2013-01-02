@@ -38,6 +38,7 @@ configuration:
 * ACHIEVO_BILLPERCENTID - defaults to 1 for "normal (100%) billable".  For Redpill Linpro, 3 is alternatively the most useful value (non-billable).
 * ACHIEVO_PHASEID - integer for the phase ID.  Need not be set for projects with only one phase.
 * ACHIEVO_TMPDIR - mostly for debugging purposes - if set, the script will store temporary files in this directory, and will delete the directory after usage.  With ACHIEVO_TMPDIR set to some directory, the given directory will be used, and no cleanup will be performed.
+* ACHIEVO_ACTIVITYID - yet another integer ID.  The default value is 9, but this default is slightly Redpill-Linpro-specific.
 
 
 KNOWN BUGS

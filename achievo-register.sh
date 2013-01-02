@@ -1,10 +1,14 @@
 #!/bin/bash
 
-[ -f "$HOME/.achievorc" ] && . "$HOME/.achievorc"
-
 project="$1"
 num_hours="$2"
 comments="$3"
+
+[ -f "$HOME/.achievorc" ] && . "$HOME/.achievorc"
+
+## Defaults
+[ -z "$ACHIEVO_BILLPERCENTID" ] && ACHIEVO_BILLPERCENTID="1"
+[ -z "$ACHIEVO_ACTIVITYID" ] && ACHIEVO_ACTIVITYID="9"
 
 if [ -z "$comments" ] || [ "$project" == "--help" ]
 then
@@ -20,10 +24,6 @@ then
     echo "Please set up a .achievorc with ACHIEVO_URL and ACHIEVO_PASS.  Read the README."
     exit 1
 fi
-
-[ -z "$ACHIEVO_BILLPERCENTID" ] && ACHIEVO_BILLPERCENTID="1"
-
-
 if [ -z "$ACHIEVO_TMPDIR" ]
 then
     tmpdir=$(mktemp -d)
@@ -84,7 +84,7 @@ fi
 
 if [ -z $ACHIEVO_PHASEID ]
 then
-    curl --silent -d userid=person.id%3D"'$userid'" -d activityid=activity.id%3D"'9'" -d 'entrydate%5Byear%5D'=$cur_year -d 'entrydate%5Bmonth%5D'=$cur_month -d 'entrydate%5Bday%5D'=$cur_day -d 'activitydate%5Byear%5D'=$year -d 'activitydate%5Bmonth%5D'=$month  -d time=$num_hours -d 'activitydate%5Bday%5D'=$day -d projectid="project.id%3D'$projectid'" -d achievo=$sessionid -d "remark=$comments" -d workperiod=1 -d billpercent="billpercent.id%3D'${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=add&atkfieldprefix=&atkpartial=attribute.phaseid.refresh&atklevel=-3&atkprevlevel=0&achivo=$sessionid" > $tmpdir/phaseid
+    curl --silent -d userid=person.id%3D"'$userid'" -d activityid=activity.id%3D"'$ACHIEVO_ACTIVITYID'" -d 'entrydate%5Byear%5D'=$cur_year -d 'entrydate%5Bmonth%5D'=$cur_month -d 'entrydate%5Bday%5D'=$cur_day -d 'activitydate%5Byear%5D'=$year -d 'activitydate%5Bmonth%5D'=$month  -d time=$num_hours -d 'activitydate%5Bday%5D'=$day -d projectid="project.id%3D'$projectid'" -d achievo=$sessionid -d "remark=$comments" -d workperiod=1 -d billpercent="billpercent.id%3D'${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=add&atkfieldprefix=&atkpartial=attribute.phaseid.refresh&atklevel=-3&atkprevlevel=0&achivo=$sessionid" > $tmpdir/phaseid
     ACHIEVO_PHASEID=$(perl -nle 'last if /phase.id='"'"'(\d+)'"'"'/ && print $1' $tmpdir/phaseid)
 fi
 
