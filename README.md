@@ -43,8 +43,7 @@ configuration:
 KNOWN BUGS
 ==========
 
-* Many default values are specific for the setup at Redpill Linpro, and some may even be specific to my department.
-* Charset problems - avoid using non-ascii letters or it may appear as WTF-8.
+* Charset problems - avoid using non-ascii letters as it gets converted to WTF-8.
 * very sloppy support for phase ID - it has to be specified as a numeric ID.  Automatic selection of phase ID works for projects with only one phase ID.
 * very sloppy support for billable percentage - for Redpill Linpro, set ACHIEVO_BILLPERCENTID=3 for "0% billable" and leave the default (1) for "100% billable".
 * Not very well tested - always follow up by checking the Web UI that the registration has gone correctly through
