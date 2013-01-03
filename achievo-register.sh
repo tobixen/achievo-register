@@ -63,8 +63,16 @@ projectid=$(perl -nle 'last if /<option value="project.id='"'"'(\d+)'"'"'"\s*>'$
 
 if [ -z "$projectid" ]
 then
-    curl --cookie-jar cookies.txt --silent "${ACHIEVO_URL}/dispatch.php?atklevel=1&atkprevlevel=1&achievo=${sessionid}&atkescape=&atknodetype=project.projectselector&atkaction=select&atksmartsearch=clear&atkstartat=0&atksearch%5Babbreviation%5D=${project}&atksearchmode%5Babbreviation%5D=substring&atksearch%5Bname%5D=&atksearchmode%5Bname%5D=substring&atksearch_AE_coordinator%5Bcoordinator%5D%5B%5D=&atksearchmode%5Bcoordinator%5D=exact" > $tmpdir/projectcode
-    projectid=$(perl -nle 'last if /project.id%3D%27(\d+)%27'"'"'"\s*>'$project'/ && print $1' $tmpdir/projectcode)
+    atkstackid=$(perl -nle 'last if /atkstackid=([0-9a-f]*)/ && print $1' $tmpdir/registration_form)
+    curl --cookie-jar cookies.txt --silent "${ACHIEVO_URL}/dispatch.php?atknodetype=project.projectselector&atkaction=select&atktarget=dispatch.php%3Fatklevel%3D0%26viewuser%3D${userid}%26projectid%3D%5Batkprimkey%5D%26hoursid%3D&viewuser=${userid}&atklevel=1&atkprevlevel=0&atkstackid=${atkstackid}&achievo=${sessionid}" > $tmpdir/selectproject ## I don't need this ... but achievo does ... achievo is rather stateful :-(
+    curl --cookie-jar cookies.txt --silent "${ACHIEVO_URL}/dispatch.php?atklevel=1&atkprevlevel=1&atkstackid=${atkstackid}&achievo=${sessionid}&atkescape=&atknodetype=project.projectselector&atkaction=select&atksmartsearch=clear&atkstartat=0&atksearch%5Babbreviation%5D=${project}&atksearchmode%5Babbreviation%5D=substring&atksearch%5Bname%5D=&atksearchmode%5Bname%5D=substring&atksearch_AE_coordinator%5Bcoordinator%5D%5B%5D=&atksearchmode%5Bcoordinator%5D=exact" > $tmpdir/projectcode
+    projectid=$(perl -nle 'last if /project.id%3D%27(\d+)%27/ && print $1' $tmpdir/projectcode)
+fi
+
+if [ -z "$projectid" ]
+then
+    echo "something has gone wrong - can't find project $project"
+    exit 1
 fi
 
 cur_year=$(date +%Y)
@@ -88,7 +96,7 @@ then
     ACHIEVO_PHASEID=$(perl -nle 'last if /phase.id='"'"'(\d+)'"'"'/ && print $1' $tmpdir/phaseid)
 fi
 
-curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'9'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='$ACHIEVO_PHASEID'" -F achievo=$sessionid -F "remark=$comments" -F workperiod=1 -F billpercent="billpercent.id='${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
+curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'$ACHIEVO_ACTIVITYID'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='$ACHIEVO_PHASEID'" -F achievo=$sessionid -F "remark=$comments" -F workperiod=1 -F billpercent="billpercent.id='${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
 
 
 ## cleanup
