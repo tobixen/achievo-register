@@ -18,6 +18,9 @@ then
     exit 1
 fi
 
+## attempt to fix charset issues
+comments="$(echo "$comments" |  iconv -f utf8 -t iso-8859-1)"
+
 ## At least the top two default values needs to be tweaked for external usage
 if [ -z "$ACHIEVO_URL" ]
 then
@@ -92,7 +95,7 @@ fi
 
 if [ -z $ACHIEVO_PHASEID ]
 then
-    curl --silent -d userid=person.id%3D"'$userid'" -d activityid=activity.id%3D"'$ACHIEVO_ACTIVITYID'" -d 'entrydate%5Byear%5D'=$cur_year -d 'entrydate%5Bmonth%5D'=$cur_month -d 'entrydate%5Bday%5D'=$cur_day -d 'activitydate%5Byear%5D'=$year -d 'activitydate%5Bmonth%5D'=$month  -d time=$num_hours -d 'activitydate%5Bday%5D'=$day -d projectid="project.id%3D'$projectid'" -d achievo=$sessionid -d "remark=$comments" -d workperiod=1 -d billpercent="billpercent.id%3D'${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=add&atkfieldprefix=&atkpartial=attribute.phaseid.refresh&atklevel=-3&atkprevlevel=0&achivo=$sessionid" > $tmpdir/phaseid
+    curl --silent -d userid=person.id%3D"'$userid'" -d activityid=activity.id%3D"'$ACHIEVO_ACTIVITYID'" -d 'entrydate%5Byear%5D'=$cur_year -d 'entrydate%5Bmonth%5D'=$cur_month -d 'entrydate%5Bday%5D'=$cur_day -d 'activitydate%5Byear%5D'=$year -d 'activitydate%5Bmonth%5D'=$month  -d time=$num_hours -d 'activitydate%5Bday%5D'=$day -d projectid="project.id%3D'$projectid'" -d achievo=$sessionid -d "remark=$comments" -d workperiod="workperiod.id%3D1" -d billpercent="billpercent.id%3D'${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=add&atkfieldprefix=&atkpartial=attribute.phaseid.refresh&atklevel=-3&atkprevlevel=0&achivo=$sessionid" > $tmpdir/phaseid
     ACHIEVO_PHASEID=$(perl -nle 'last if /phase.id='"'"'(\d+)'"'"'/ && print $1' $tmpdir/phaseid)
 fi
 

@@ -1,0 +1,19 @@
+#!/usr/bin/perl -p
+unless ($conffile) {
+## Find and parse configuration
+$0 =~ m|(.*)/([^\/\.]*)(\..*)?$|;
+$execdir=$1;
+$basename=$2;
+$basename =~ /^[0-9A-F]+-/;
+$logalias = $'; #'; # stupid comment to make emacs perl-mode happy
+$conffile="$execdir/../conf.d/$basename.conf";
+-r $conffile || die "couldn't read $conffile";
+require "$conffile";
+}
+
+for $l (@list) {
+    $regexp=$l->[0];
+    $achievoid=$l->[1];
+    $comments=$l->[2];
+    s/(\![bhc] )$regexp(\s+\d?\d:\d\d)?/uc($1)."$achievoid $2 $comments"/e;
+}

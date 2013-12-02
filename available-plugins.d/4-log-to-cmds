@@ -1,0 +1,24 @@
+#!/usr/bin/perl -nl
+
+next if /^\s*$/;
+
+/^\s*(20\d\d-\d\d-\d\d)(?:\s*\d\d:\d\d(?::\d\d)?)?\s*\<.?$ENV{'USER'}>\s*\!H\s*([\w-]+)\s*(.*)/ || warn;
+
+$date=$1;
+$project=$2;
+$_=$3;
+
+$billable=/(u|ikke)-?fakt[uo]rer(bar)?t?/i ? "ACHIEVO_BILLPERCENTID=3" : "";
+
+if (s/^\s*(\d?\d:\d\d)\s*(.*)/$2/) {
+    $hours = $1;
+}  else {
+    $hours = "01:00"
+}
+
+## temp temp temp ... due to some bug somewhere
+if (s/\s*(\d{1,2}:\d\d)$//) {
+    $hours = $1;
+}
+
+print "env ACHIEVO_DATE='$date' $billable achievo-register.sh $project $hours '$_'";

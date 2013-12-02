@@ -1,0 +1,1 @@
+/home/tobias/.config/achievo/

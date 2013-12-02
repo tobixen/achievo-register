@@ -1,3 +1,7 @@
+NOTE: ask me about registration-log.py eventually.  This is published as-is as
+for now, but missing parts and bits (personal configuration, plugins, etc) and
+missing documentation.
+
 This is primary made for employees of Redpill-Linpro.  This may be
 useful for others using achievo as well, I'd be happy to know if the
 script works out of the box or not for other achievo instances.
