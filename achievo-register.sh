@@ -20,6 +20,7 @@ fi
 
 ## attempt to fix charset issues
 comments="$(echo "$comments" |  iconv -f utf8 -t iso-8859-1)"
+project="$(echo "$project" | iconv -f utf8 -t iso-8859-1)"
 
 ## At least the top two default values needs to be tweaked for external usage
 if [ -z "$ACHIEVO_URL" ]
