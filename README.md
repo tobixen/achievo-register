@@ -29,7 +29,7 @@ Quickguide optimized for fellow colleagues
 Install & use
 =============
 
-Trygve Vea (tv at redpill-linpro.com) has made a wrapper-script ''bill''
+Trygve Vea (tv at redpill-linpro) has made a wrapper-script _bill_
 with argument handling and usage instructions.  Said script contains
 hard-coded constants which may be site-specific, but will probably
 work out of the box for employees at Redpill-Linpro.
