@@ -3,6 +3,7 @@
 usage() {
   echo "Usage \`$(basename $0) [-d date][-w <100|150|200>][-f][-r <0|50|100|150|200>] project hours line\`" 1>&2
   echo ""
+  echo "(This script will probably fail if used outside Redpill-Linpro)"
   echo "    -d date     Dato hvor tiden skal registreres, default i dag -- input til date +%Y-%m-%d --date="
   echo "    -w N        Arbeidstid i prosent (100 = dagtid, 150 = 50% overtid, 200 = 100% overtid)"
   echo "    -f          Overtiden skal legges til på fleksikonto"

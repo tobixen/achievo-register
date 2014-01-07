@@ -29,6 +29,11 @@ Quickguide optimized for fellow colleagues
 Install & use
 =============
 
+Trygve Vea <tv@redpill-linpro.com> has made a wrapper-script ''bill''
+with argument handling and usage instructions.  Said script contains
+hard-coded constants which may be site-specific, but will probably
+work out of the box for employees at Redpill-Linpro.
+
 Currently the achievo register script is a simple stupid bash script
 that takes three positional mandatory arguments - the project code,
 the number of hours and the remarks.  Since option passing in bash is
