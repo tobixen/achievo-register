@@ -8,6 +8,7 @@ comments="$3"
 
 ## Defaults
 [ -z "$ACHIEVO_BILLPERCENTID" ] && ACHIEVO_BILLPERCENTID="1"
+[ -z "$ACHIEVO_WORKPERIODID" ] && ACHIEVO_WORKPERIODID="1"
 [ -z "$ACHIEVO_ACTIVITYID" ] && ACHIEVO_ACTIVITYID="9"
 
 if [ -z "$comments" ] || [ "$project" == "--help" ]
@@ -96,11 +97,11 @@ fi
 
 if [ -z $ACHIEVO_PHASEID ]
 then
-    curl --silent -d userid=person.id%3D"'$userid'" -d activityid=activity.id%3D"'$ACHIEVO_ACTIVITYID'" -d 'entrydate%5Byear%5D'=$cur_year -d 'entrydate%5Bmonth%5D'=$cur_month -d 'entrydate%5Bday%5D'=$cur_day -d 'activitydate%5Byear%5D'=$year -d 'activitydate%5Bmonth%5D'=$month  -d time=$num_hours -d 'activitydate%5Bday%5D'=$day -d projectid="project.id%3D'$projectid'" -d achievo=$sessionid -d "remark=$comments" -d workperiod="workperiod.id%3D1" -d billpercent="billpercent.id%3D'${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=add&atkfieldprefix=&atkpartial=attribute.phaseid.refresh&atklevel=-3&atkprevlevel=0&achivo=$sessionid" > $tmpdir/phaseid
+    curl --silent -d userid=person.id%3D"'$userid'" -d activityid=activity.id%3D"'$ACHIEVO_ACTIVITYID'" -d 'entrydate%5Byear%5D'=$cur_year -d 'entrydate%5Bmonth%5D'=$cur_month -d 'entrydate%5Bday%5D'=$cur_day -d 'activitydate%5Byear%5D'=$year -d 'activitydate%5Bmonth%5D'=$month  -d time=$num_hours -d 'activitydate%5Bday%5D'=$day -d projectid="project.id%3D'$projectid'" -d achievo=$sessionid -d "remark=$comments" -d workperiod="workperiod.id%3D'${ACHIEVO_WORKPERIODID}'" -d billpercent="billpercent.id%3D'${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=add&atkfieldprefix=&atkpartial=attribute.phaseid.refresh&atklevel=-3&atkprevlevel=0&achivo=$sessionid" > $tmpdir/phaseid
     ACHIEVO_PHASEID=$(perl -nle 'last if /phase.id='"'"'(\d+)'"'"'/ && print $1' $tmpdir/phaseid)
 fi
 
-curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'$ACHIEVO_ACTIVITYID'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='$ACHIEVO_PHASEID'" -F achievo=$sessionid -F "remark=$comments" -F workperiod=1 -F billpercent="billpercent.id='${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
+curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'$ACHIEVO_ACTIVITYID'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='$ACHIEVO_PHASEID'" -F achievo=$sessionid -F "remark=$comments" -F workperiod="workperiod.id='${ACHIEVO_WORKPERIODID}'" -F billpercent="billpercent.id='${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
 
 
 ## cleanup

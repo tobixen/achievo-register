@@ -1,0 +1,92 @@
+#!/bin/bash
+
+usage() {
+  echo "Usage \`$(basename $0) [-d date][-w <100|150|200>][-f][-r <0|50|100|150|200>] project hours line\`" 1>&2
+  echo ""
+  echo "    -d date     Dato hvor tiden skal registreres, default i dag -- input til date +%Y-%m-%d --date="
+  echo "    -w N        Arbeidstid i prosent (100 = dagtid, 150 = 50% overtid, 200 = 100% overtid)"
+  echo "    -f          Overtiden skal legges til på fleksikonto"
+  echo "    -r N        Faktureringsgrad i prosent."
+  echo "    project     Prosjekt timene skal føres på"
+  echo "    hours       Antall timer"
+  echo "    line        Fakturalinjen"
+  echo ""
+  exit 1
+}
+
+WORK=100
+RATE=100
+FLEX=false
+ACHIEVO_DATE=$(date +%Y-%m-%d --date=today)
+
+while getopts "d:w:fr:" o; do
+  case "${o}" in
+    d)
+      ACHIEVO_DATE=$(date +%Y-%m-%d --date="${OPTARG}")
+      ;;
+    w)
+      WORK=${OPTARG}
+      RATE=${OPTARG}
+#      echo "W: ${OPTARG}"
+      ;;
+    r)
+      RATE=${OPTARG}
+#      echo "R: ${OPTARG}"
+      ;;
+    f)
+      FLEX=true
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [ $# -ne 3 ]; then
+  usage
+fi
+
+ACHIEVO_BILLPERCENTID=1
+
+if [ "$RATE" -eq 100 ]; then
+  ACHIEVO_BILLPERCENTID=1
+elif [ "$RATE" -eq 150 ]; then
+  ACHIEVO_BILLPERCENTID=4
+elif [ "$RATE" -eq 200 ]; then
+  ACHIEVO_BILLPERCENTID=2
+elif [ "$RATE" -eq 50 ]; then
+  ACHIEVO_BILLPERCENTID=5
+elif [ "$RATE" -eq 0 ]; then
+  ACHIEVO_BILLPERCENTID=3
+fi
+
+ACHIEVO_WORKPERIODID=1
+
+if [ "$WORK" -eq 100 ]; then
+  ACHIEVO_WORKPERIODID=1
+elif [ "$WORK" -eq 150 ]; then
+  if $FLEX; then
+    ACHIEVO_WORKPERIODID=5
+  else
+    ACHIEVO_WORKPERIODID=4
+  fi
+elif [ "$WORK" -eq 200 ]; then
+  if $FLEX; then
+    ACHIEVO_WORKPERIODID=2
+  else
+    ACHIEVO_WORKPERIODID=6
+  fi
+elif [ "$WORK" -eq 0 ]; then
+  ACHIEVO_WORKPERIODID=3
+fi
+
+export ACHIEVO_BILLPERCENTID
+export ACHIEVO_WORKPERIODID
+export ACHIEVO_DATE
+
+echo "Bill ID  : $ACHIEVO_BILLPERCENTID"
+echo "Work ID  : $ACHIEVO_WORKPERIODID"
+echo "Date     : $ACHIEVO_DATE"
+echo "Project  : $1"
+echo "Hours    : $2"
+echo "Bill line: \"$3\""
+
+~/achievo-register/achievo-register.sh $1 $2 "$3"
