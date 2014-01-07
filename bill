@@ -7,6 +7,7 @@ usage() {
   echo "    -d date     Dato hvor tiden skal registreres, default i dag -- input til date +%Y-%m-%d --date="
   echo "    -w N        Arbeidstid i prosent (100 = dagtid, 150 = 50% overtid, 200 = 100% overtid)"
   echo "    -f          Overtiden skal legges til på fleksikonto"
+  echo "    -q          Minst mulig til stdout"
   echo "    -r N        Faktureringsgrad i prosent."
   echo "    project     Prosjekt timene skal føres på"
   echo "    hours       Antall timer"
@@ -18,9 +19,10 @@ usage() {
 WORK=100
 RATE=100
 FLEX=false
+QUIET=false
 ACHIEVO_DATE=$(date +%Y-%m-%d --date=today)
 
-while getopts "d:w:fr:" o; do
+while getopts "d:w:fqr:" o; do
   case "${o}" in
     d)
       ACHIEVO_DATE=$(date +%Y-%m-%d --date="${OPTARG}")
@@ -36,6 +38,9 @@ while getopts "d:w:fr:" o; do
       ;;
     f)
       FLEX=true
+      ;;
+    q)
+      QUIET=true
       ;;
   esac
 done
@@ -83,11 +88,18 @@ export ACHIEVO_BILLPERCENTID
 export ACHIEVO_WORKPERIODID
 export ACHIEVO_DATE
 
-echo "Bill ID  : $ACHIEVO_BILLPERCENTID"
-echo "Work ID  : $ACHIEVO_WORKPERIODID"
-echo "Date     : $ACHIEVO_DATE"
-echo "Project  : $1"
-echo "Hours    : $2"
-echo "Bill line: \"$3\""
+if [ "$QUIET" == "false" ];
+then
+  echo "Bill ID  : $ACHIEVO_BILLPERCENTID"
+  echo "Work ID  : $ACHIEVO_WORKPERIODID"
+  echo "Date     : $ACHIEVO_DATE"
+  echo "Project  : $1"
+  echo "Hours    : $2"
+  echo "Bill line: \"$3\""
+fi
+
+## TODO: eventually those scripts should be merged together, but remains 
+## split as this script contains lots of hardcoded constants that may be 
+## site-specific.
 
 ~/achievo-register/achievo-register.sh $1 $2 "$3"
