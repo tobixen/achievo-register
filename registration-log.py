@@ -78,13 +78,23 @@ if __name__ == '__main__':
                     runlevels = '4'
                     print("assuming run level 4")
                 else:
+                    print("assuming run level 5")
+                    all_success = True
                     with open(logfile, 'r') as logfile:
                         for line in logfile:
                             line = line.strip()
+                            print(line)
                             (ret, output) = subprocess.getstatusoutput(line)
                             if ret:
                                 print("ERROR: this command failed:\n%s\n%s" % (line, "output: %s"%output if output else ""))
-                    print("HOURS REGISTERED! :-)")
+                                all_success = False
+                            else:
+                                print("success!")
+                    if all_success:
+                        print("Hours registered! :-) :-) :-)")
+                        os.remove(logfile)
+                    else:
+                        print("ERRORS encountered, hours may be partly registered!");
                     if not options.from_date:
                         with open("%s/watermark" % logdir, 'w') as wmf:
                             wmf.write(todate)

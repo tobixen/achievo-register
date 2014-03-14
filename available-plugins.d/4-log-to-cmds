@@ -2,7 +2,10 @@
 
 next if /^\s*$/;
 
-/^\s*(20\d\d-\d\d-\d\d)(?:\s*\d\d:\d\d(?::\d\d)?)?\s*\<.?$ENV{'USER'}>\s*\!H\s*([\w-]+)\s*(.*)/ || warn;
+if (!/^\s*(20\d\d-\d\d-\d\d)(?:\s*\d\d:\d\d(?::\d\d)?)?\s*\<.?$ENV{'USER'}>\s*\!H\s*([\w-]+)\s*(.*)/) {
+ warn;
+ next;
+}
 
 $date=$1;
 $project=$2;
