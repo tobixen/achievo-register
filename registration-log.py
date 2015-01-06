@@ -80,8 +80,8 @@ if __name__ == '__main__':
                 else:
                     print("assuming run level 5")
                     all_success = True
-                    with open(logfile, 'r') as logfile:
-                        for line in logfile:
+                    with open(logfile, 'r') as logfileh:
+                        for line in logfileh:
                             line = line.strip()
                             print(line)
                             (ret, output) = subprocess.getstatusoutput(line)
