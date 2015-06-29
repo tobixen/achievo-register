@@ -14,5 +14,6 @@ do
     cd $workdir
     git fetch > /dev/null 2>&1 || echo "!c $curdate <$LOGNAME> !c $workdir warn: git fetch yield errors"
     git branch -avvvv 2>&1 | grep -q ': ahead ' && echo "!c $curdate <$LOGNAME> !c $workdir warn: local commits in the repository"
-    git log -v --since="$1" --until="$2" --date=iso8601 | perl -e '$_=do {  local $/ = <> }; @foo=split(/^commit/m); for $commit (@foo) { @lines=split(/\n/m, $commit); next if $lines[1] !~ /[Tt]obi/; $lines[2] =~ /Date:\s*(.*) [+-]/; print "$1 <'$LOGNAME'> !c '$basename' $lines[4]\n"; } '
+    git status 2>&1 | grep -q ' modified: ' && echo "!c $curdate <$LOGNAME> !c $workdir warn: uncommitted work in the repository"
+    { git log FETCH_HEAD --branches -v --since="$1" --until="$2" --date=iso8601 || git log --branches -v --since="$1" --until="$2" --date=iso8601 ; } 2>&1 | perl -e '$_=do {  local $/ = <> }; @foo=split(/^commit/m); for $commit (@foo) { @lines=split(/\n/m, $commit); next if $lines[1] !~ /[Tt]obi/; $lines[2] =~ /Date:\s*(.*) [+-]/; print "$1 <'$LOGNAME'> !c '$basename' $lines[4]\n"; } '
 done

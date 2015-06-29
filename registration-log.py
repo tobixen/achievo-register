@@ -3,7 +3,7 @@
 __version__ = '0.01'
 
 from optparse import OptionParser
-import os, time, subprocess
+import os, time, subprocess, logging
 
 ## Runlevel definition:
 ## 1: fetch data from source
@@ -16,7 +16,11 @@ def run(runlevel, fromdate, todate, logfile, plugins_dir):
         with open(logfile, 'w') as logfh:
             for fn in os.listdir(plugins_dir):
                 if fn.startswith(runlevel+'-'):
-                    subprocess.check_call(["%s/%s" % (plugins_dir, fn), fromdate, todate], stdout=logfh)
+                    try:
+                        subprocess.check_call(["%s/%s" % (plugins_dir, fn), fromdate, todate], stdout=logfh)
+                    except:
+                        logging.error("problems executing %s" % (["%s/%s" % (plugins_dir, fn), fromdate, todate]), exc_info=True)
+                        raise
         subprocess.check_call(["/usr/bin/git", "add", logfile])
         subprocess.check_call(["/usr/bin/git", "commit", "-m", "autocommit: file sourced from plugins"])
     else:
