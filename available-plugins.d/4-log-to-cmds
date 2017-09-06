@@ -13,6 +13,12 @@ $_=$3;
 
 $billable=/(u|ikke)-?fakt[uo]rer(bar)?t?/i ? "ACHIEVO_BILLPERCENTID=3" : "";
 
+if (/overtid50/) {
+    $billable = $billable ? "$billable ACHIEVO_WORKPERIODID=5" : "ACHIEVO_BILLPERCENTID=4"
+} elsif (/overtid/) {
+    $billable = $billable ? "$billable ACHIEVO_WORKPERIODID=2" : "ACHIEVO_BILLPERCENTID=2"
+}
+
 if (s/^\s*(\d?\d:\d\d)\s*(.*)/$2/) {
     $hours = $1;
 }  else {
