@@ -101,7 +101,7 @@ then
     ACHIEVO_PHASEID=$(perl -nle 'last if /phase.id='"'"'(\d+)'"'"'/ && print $1' $tmpdir/phaseid)
 fi
 
-curl -F atklevel=1 -F atkprevlevel=0 -F atkaction=save -F atkprevaction=admin -F userid=person.id="'$userid'" -F activityid=activity.id="'$ACHIEVO_ACTIVITYID'" -F 'entrydate[year]'=$cur_year -F 'entrydate[month]'=$cur_month -F 'entrydate[day]'=$cur_day -F 'activitydate[year]'=$year -F 'activitydate[month]'=$month -F 'activitydate[day]'=$day -F projectid="project.id='$projectid'" -F phaseid="phase.id='$ACHIEVO_PHASEID'" -F achievo=$sessionid -F "remark=$comments" -F workperiod="workperiod.id='${ACHIEVO_WORKPERIODID}'" -F billpercent="billpercent.id='${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" -F time=$num_hours
+curl --form-string atklevel=1 --form-string atkprevlevel=0 --form-string atkaction=save --form-string atkprevaction=admin --form-string userid=person.id="'$userid'" --form-string activityid=activity.id="'$ACHIEVO_ACTIVITYID'" --form-string 'entrydate[year]'=$cur_year --form-string 'entrydate[month]'=$cur_month --form-string 'entrydate[day]'=$cur_day --form-string 'activitydate[year]'=$year --form-string 'activitydate[month]'=$month --form-string 'activitydate[day]'=$day --form-string projectid="project.id='$projectid'" --form-string phaseid="phase.id='$ACHIEVO_PHASEID'" --form-string achievo=$sessionid --form-string "remark=$comments" --form-string workperiod="workperiod.id='${ACHIEVO_WORKPERIODID}'" --form-string billpercent="billpercent.id='${ACHIEVO_BILLPERCENTID}'" "${ACHIEVO_URL}/dispatch.php?atknodetype=timereg.hours&atkaction=admin&atklevel=-1&atkprevlevel=0&achivo=$sessionid" --form-string time=$num_hours
 
 
 ## cleanup
