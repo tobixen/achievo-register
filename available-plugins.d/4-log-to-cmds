@@ -14,9 +14,9 @@ $_=$3;
 $billable=/(u|ikke)-?fakt[uo]rer(bar)?t?/i ? "ACHIEVO_BILLPERCENTID=3" : "";
 
 ## TODO: parse timestamp, read FLEXITIME attribute from config
-if (/overtid50/) {
+if (/overtid50/i) {
     $billable = $billable ? "$billable ACHIEVO_WORKPERIODID=5" : "ACHIEVO_BILLPERCENTID=4 ACHIEVO_WORKPERIODID=5"
-} elsif (/overtid/) {
+} elsif (/overtid/i) {
     $billable = $billable ? "$billable ACHIEVO_WORKPERIODID=2" : "ACHIEVO_BILLPERCENTID=2 ACHIEVO_WORKPERIODID=2"
 }
 
