@@ -53,6 +53,19 @@ fi
 ## logging in
 curl --cookie-jar cookies.txt --data "auth_user=$ACHIEVO_USER&auth_pw=$ACHIEVO_PASS" --silent "${ACHIEVO_URL}/index.php" > $tmpdir/loginresult
 
+if grep -q 401 $tmpdir/loginresult
+then
+    read -s -p "Enter HTTP AUTH password (<Enter> for same as Achievo): " http_pass
+    # Try to add username and password to the URL for HTTP AUTH.
+    ACHIEVO_URL=$(perl -e 'my ($url, $user, $pass) = @ARGV;
+                           $pass =~ s/(.)/sprintf("%%%02x", ord($1))/ge;
+                           $url =~ s,(https?:)//,$1//$user:$pass\@,;
+                           print $url, "\n";' \
+                       "$ACHIEVO_URL" "$ACHIEVO_USER" "${http_pass:-$ACHIEVO_PASS}")
+    curl --cookie-jar cookies.txt --data "auth_user=$ACHIEVO_USER&auth_pw=$ACHIEVO_PASS" --silent "${ACHIEVO_URL}/index.php" > $tmpdir/loginresult
+fi
+
+
 ## fetching the session token
 sessionid=$(perl -nle 'last if /achievo=([0-9a-f]{32})/ && print $1' $tmpdir/loginresult)
 
